@@ -36,6 +36,11 @@ yarn-error.log*
 # vercel
 .vercel
 
+# linked local package
+/unified-cdn-api
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/unified-cdn-api
