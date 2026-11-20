@@ -12,6 +12,13 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  experimental: {
+    serverActions: {
+      allowedOrigins: [
+        'playground.unified-cdn.ngqian.com',
+      ],
+    },
+  },
 };
 
 export default nextConfig;
