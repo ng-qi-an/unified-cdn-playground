@@ -2,6 +2,7 @@
 @plugin "@tailwindcss/typography";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@source "../node_modules/@blocknote/shadcn";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -82,6 +83,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --bn-background-color-editor: var(--background);
 }
 
 .dark {
@@ -131,4 +133,9 @@
   html {
     @apply font-sans;
   }
+}
+
+.bn-editor {
+  --bn-colors-editor-background: var(--card);
+    --bn-background-color-hovered: #b00000;
 }

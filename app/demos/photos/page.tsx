@@ -77,15 +77,7 @@ export default function PhotosPage() {
             <div className="h-[calc(30vh+100px)] shrink-0"/>
             <div className="shrink-0 min-h-[calc(70vh-100px)] bg-card w-full rounded-t-4xl max-w-[1000px] p-4">
                 <div className="flex items-center w-full gap-2">
-                    <div className="flex items-center rounded-lg gap-2 w-max p-2 px-3 pr-4 hover:bg-muted dark:hover:bg-muted/50 cursor-pointer">
-                        <div className="flex items-center justify-center rounded-lg bg-secondary size-10">
-                            <Server className="size-4"/>
-                        </div>
-                        <div>
-                            <p className="text-sm text-muted-foreground">Running on:</p>
-                            <p className="text-sm">Demo server</p>
-                        </div>
-                    </div>
+                    <p className="text-sm text-muted-foreground">Photos are automatically cleared by 24 hours</p>
                     <div className="flex-1"/>
                     <SamplePhotos>
                         <Button size="lg" variant="ghost">Samples <ChevronDown/> </Button>
