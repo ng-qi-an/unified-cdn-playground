@@ -58,7 +58,7 @@ export default function Home(){
         <Button size="lg" className="px-8 pr-6 py-6 text-lg gap-4" onClick={()=>{
           setNavigating(true);
           setTimeout(()=>{
-            router.push("/photos");
+            router.push("/demos/photos");
           }, 500)
         }}>Start <ArrowRight/></Button>
       </motion.div>

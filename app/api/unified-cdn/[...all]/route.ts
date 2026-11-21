@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { toNextHandler } from "unified-cdn-api/handlers/nextjs";
 import { UnifiedCDN } from "unified-cdn-api" 
+import { convertFileTypesToList } from "unified-cdn-api/helpers";
 export const POST = async(res: NextRequest, ctx: RouteContext<"/api/unified-cdn/[...all]">)=> { 
     const data = await res.clone().json();
     let apiKey = data.apiKey;
@@ -21,6 +22,9 @@ export const POST = async(res: NextRequest, ctx: RouteContext<"/api/unified-cdn/
                     } else {
                         return count;
                     }
+                },
+                data: {
+                    allowedFileTypes: convertFileTypesToList(["images", "documents", "text"])
                 }
             }
         }

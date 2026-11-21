@@ -6,7 +6,7 @@ import { useAPIContext } from "@/components/providers/api-provider";
 import { ChevronDown, Server, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { UnifiedCDNFileJSON } from "unified-cdn-api/types";
-import { getPhotos } from "./actions/getPhotos";
+import { getPhotos } from "../actions/getPhotos";
 import SamplePhotos from "./SamplePhotos";
 import { toast } from "@/components/ui/toast";
 import { APIError } from "unified-cdn-api/errors";
@@ -21,7 +21,7 @@ export default function PhotosPage() {
     function handleUploadFiles(files: File[]){
         if (files.length === 0) return;
         setUploading(true);
-        toast.promise(new Promise<{uploads: UnifiedCDNFileJSON[]; failed: string[]}>(async(resolve, reject) => {
+        toast.promise(new Promise<{uploads: UnifiedCDNFileJSON[]; failed: {filename: string, reason: string}[]}>(async(resolve, reject) => {
             try {
                 const response = await api.ucdnClient?.uploadFiles(files);
                 if (!response) throw new Error("No client available to upload files.");

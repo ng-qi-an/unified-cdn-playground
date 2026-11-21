@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { APIContextType } from "@/components/providers/api-provider";
-import { getPhotos } from "./actions/getPhotos";
+import { getPhotos } from "../actions/getPhotos";
 import { UnifiedCDNFileJSON } from "unified-cdn-api/types";
 import { AnimatePresence, motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, MoreHorizontal, Trash, X } from "lucide-react";
-import { renamePhoto } from "./actions/renamePhoto";
+import { renamePhoto } from "../actions/renamePhoto";
 import { toast } from "@/components/ui/toast";
 import { APIError } from "unified-cdn-api/errors";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { deletePhoto } from "./actions/deletePhoto";
+import deleteFile from "../actions/deleteFile";
 
 
 export default function PhotoCard({photo, api, setPhotos}: {photo: UnifiedCDNFileJSON, api: APIContextType, setPhotos: (photos: UnifiedCDNFileJSON[]) => void}){
@@ -36,7 +36,7 @@ export default function PhotoCard({photo, api, setPhotos}: {photo: UnifiedCDNFil
                         setSaving(true);
                         toast.promise(new Promise<void>(async(resolve, reject) => {
                             try {
-                                await deletePhoto({apiUrl: api.apiUrl || undefined, apiKey: api.apiKey || undefined, fileId: photo.id});
+                                await deleteFile({apiUrl: api.apiUrl || undefined, apiKey: api.apiKey || undefined, fileId: photo.id});
                                 const newPhotos = await getPhotos({apiUrl: api.apiUrl || undefined, apiKey: api.apiKey || undefined});
                                 setPhotos(newPhotos);
                                 resolve();

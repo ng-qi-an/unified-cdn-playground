@@ -54,7 +54,7 @@ export default function PhotosGrid({photos, setPhotos, loading, onFilesDropped}:
                     console.error("Could not turn dropped image URL into a file:", error);
                 }
             }}
-            className={`w-full shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mt-3 rounded-lg transition-colors ${isDragging ? "outline-2 outline-dashed outline-primary bg-primary/5" : ""} min-h-[calc(70vh-200px)]`}
+            className={`w-full shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mt-3 rounded-lg transition-colors ${isDragging ? "outline-2 outline-dashed outline-primary bg-primary/5" : ""}`}
         >
             {loading ? <>
                 {[...Array(6)].map((_, i)=>{
