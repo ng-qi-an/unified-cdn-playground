@@ -135,7 +135,6 @@
   }
 }
 
-.bn-editor {
-  --bn-colors-editor-background: var(--card);
-    --bn-background-color-hovered: #b00000;
+.dark .bn-editor {
+  --bn-colors-editor-background: transparent !important;
 }

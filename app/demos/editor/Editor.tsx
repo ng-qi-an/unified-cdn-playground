@@ -4,12 +4,15 @@ import { toast } from "@/components/ui/toast";
 import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/shadcn";
 import "@blocknote/shadcn/style.css";
+import { useTheme } from "next-themes";
 import { APIError } from "unified-cdn-api/errors";
 
 export default function Editor({api}: {api: APIContextType}){
+    const ucdnClient = api.ucdnClient; // You should typically be importing ucdnClient directly from a ucdnClient.ts file, but since this playground allows u to change api key and url, we stored the client in React Context instead of a file.
+    const { resolvedTheme } = useTheme();
     const editor = useCreateBlockNote({
         uploadFile: async (file: File)=>{
-            if (!api.ucdnClient) {
+            if (!ucdnClient) {
                 toast.add({
                     title: "Upload failed",
                     description: "No API client available.",
@@ -18,7 +21,7 @@ export default function Editor({api}: {api: APIContextType}){
                 throw new Error("No API client available.");
             }
             try {
-                const { uploads, failed } = await api.ucdnClient.uploadFiles([file]);
+                const { uploads, failed } = await ucdnClient.uploadFiles([file]);
                 if (failed.length > 0) {
                     toast.add({
                         title: "Upload failed",
@@ -49,5 +52,6 @@ export default function Editor({api}: {api: APIContextType}){
     });
     return <BlockNoteView
         editor={editor}
+        theme={resolvedTheme == "dark" ? "dark" : "light"}
     />
 }

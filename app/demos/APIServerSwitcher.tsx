@@ -17,16 +17,16 @@ export default function APIServerSwitcher(){
     const [checking, setChecking] = useState(false);
     return <Popover>
         <PopoverTrigger render={
-            <button className={`w-9 sm:w-max sm:px-4 py-2 rounded-full text-sm cursor-pointer relative text-muted-foreground hover:bg-accent/50 aria-expanded:bg-accent aria-expanded:text-foreground active:text-foreground active:bg-accent flex items-center justify-center gap-2 h-9`}>
+            <button className={`w-9 sm:w-max sm:px-4 py-2 rounded-full text-sm cursor-pointer relative text-muted-foreground hover:bg-accent/50 aria-expanded:bg-accent aria-expanded:text-foreground active:text-foreground active:bg-accent flex items-center justify-center gap-2 h-9`} title="Change the server Playground connects to">
                 <Globe className="size-4"/>
                 <span className="hidden sm:block">{(api.apiUrl && api.apiKey) ? "Custom server" : "Demo server"}</span>
             </button>
         }/>
-        <PopoverContent align="start">
-            <div className='flex gap-2'>
+        <PopoverContent align="start" className="w-xs" sideOffset={8}>
+            <div className='flex gap-2 justify-between'>
             <PopoverHeader>
                 <PopoverTitle>API Server</PopoverTitle>
-                <PopoverDescription>Change where playground sends requests to.</PopoverDescription>
+                <PopoverDescription>Change where Playground sends requests to</PopoverDescription>
             </PopoverHeader>
             <Button size="icon-sm" variant="ghost" title="Reset to default" type="button" disabled={!apiUrl && !apiKey} onClick={()=>{
                 setApiUrl("");
@@ -75,7 +75,7 @@ export default function APIServerSwitcher(){
                     <FieldLabel>
                         API Server URL
                     </FieldLabel>
-                    <Input required type="text" value={apiUrl} onChange={(e)=>{
+                    <Input required type="url" value={apiUrl} placeholder="https://demo.unified-cdn.ngqian.com" onChange={(e)=>{
                         setApiUrl(e.target.value);
                     }}/>
                     <FieldDescription>

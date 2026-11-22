@@ -28,8 +28,8 @@ export default function ChatMessage({ message, status, mostRecentMessage }: { me
                 <BubbleContent>
                     {message.role == "assistant" ? <>
                         {message.parts.filter((part)=> part.type == "reasoning").length > 0 && <Trace className="mb-2">
-                            {message.parts.filter((part)=> part.type == "reasoning").map((part)=>{
-                                return <TraceCollapsible>
+                            {message.parts.filter((part)=> part.type == "reasoning").map((part, index)=>{
+                                return <TraceCollapsible key={part.id+"reasoning"+index}>
                                     <TraceCollapsibleTrigger>
                                         <TraceLine status={part.state == "streaming" ? "running" : undefined }>
                                             <TraceIcon>

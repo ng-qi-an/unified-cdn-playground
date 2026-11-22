@@ -30,6 +30,8 @@ export default function ChatInput({ sendMessage, status, stop }: { sendMessage: 
     const [files, setFiles] = useState<({status: string} & Pick<UnifiedCDNFileJSON, "id" | "name" | "contentType" | "size" | "viewUrl">)[]>([]);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const api = useAPIContext();
+    const ucdnClient = api.ucdnClient; // You should typically be importing ucdnClient directly from a ucdnClient.ts file, but since this playground allows u to change api key and url, we stored the client in React Context instead of a file.
+
     function submitMessage(){
         if ((!input.trim() && files.filter((x)=> x.status == "done").length == 0) || status == "streaming" || status == "submitted" ) return;
         sendMessage({ text: input.trim(), files: files.filter((file)=> file.status == "done").map((file)=> ({type: "file", mediaType: file.contentType, url: file.viewUrl, filename: file.name}))});
@@ -102,7 +104,7 @@ export default function ChatInput({ sendMessage, status, stop }: { sendMessage: 
             <InputGroupAddon align="block-end" className="p-3">
                 <input ref={fileInputRef} type="file" multiple accept={convertFileTypesToList(["images", "documents", "text"]).join(",")} className="hidden" onChange={async (e)=>{
                     if (!e.target.files || e.target.files.length === 0) return;
-                    if (!api.ucdnClient) {
+                    if (!ucdnClient) {
                         toast.add({
                             title: "Error uploading files",
                             description: "API client not initialized.",
@@ -114,7 +116,7 @@ export default function ChatInput({ sendMessage, status, stop }: { sendMessage: 
                     e.target.value = "";
                     setFiles((prev)=> [...prev, ...files.map((file)=> ({status: "loading", id: generateId(), name: file.name, size: file.size, contentType: file.type, viewUrl: ""}))]);
                     try {
-                        const {uploads, failed} = await api.ucdnClient.uploadFiles(files, {apiUrl: api.apiKey, apiKey: api.apiKey});
+                        const {uploads, failed} = await ucdnClient.uploadFiles(files, {apiUrl: api.apiKey, apiKey: api.apiKey});
                         if (failed.length > 0){
                             toast.add({
                                 title: "Error uploading files",

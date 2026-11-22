@@ -30,7 +30,7 @@ export default function EditorPage() {
         </motion.div>
         <div ref={scrollContainerRef} className="h-screen flex flex-col items-center w-full overflow-auto absolute top-0 left-0 px-2 md:px-4">
             <div className="h-[calc(30vh+100px)] shrink-0"/>
-            <div className="shrink-0 min-h-[calc(70vh-100px)] bg-card w-full rounded-t-4xl max-w-[1000px] p-4">
+            <div className="shrink-0 min-h-[calc(70vh-100px)] border bg-background dark:border-none dark:bg-card w-full rounded-t-4xl max-w-[1000px] p-4">
                 <div className="flex items-center w-full gap-2 mb-4 pb-2 border-b">
                     <p className="text-sm text-muted-foreground">This editor is not saved, and clears when you leave the page.</p>
                     <div className="flex-1"/>

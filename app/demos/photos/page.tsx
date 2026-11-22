@@ -10,6 +10,7 @@ import { getPhotos } from "../actions/getPhotos";
 import SamplePhotos from "./SamplePhotos";
 import { toast } from "@/components/ui/toast";
 import { APIError } from "unified-cdn-api/errors";
+import { convertFileTypesToList } from "unified-cdn-api/helpers";
 export default function PhotosPage() {
     const scrollContainerRef = useRef<HTMLDivElement | null>(null)
     const [scrollYProgress, setScrollYProgress] = useState(0);
@@ -18,13 +19,29 @@ export default function PhotosPage() {
     const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const api = useAPIContext();
+    const ucdnClient = api.ucdnClient; // You should typically be importing ucdnClient directly from a ucdnClient.ts file, but since this playground allows u to change api key and url, we stored the client in React Context instead of a file.
     function handleUploadFiles(files: File[]){
         if (files.length === 0) return;
+        if (files.some((file)=> !convertFileTypesToList(["images"]).includes(file.type))){
+            toast.add({
+                title: "Invalid file type",
+                description: "Only image files are allowed.",
+                type: "error"
+            });
+            return;
+        }
+        if (!ucdnClient) {
+            toast.add({
+                title: "Upload failed",
+                description: "No API client available.",
+                type: "error",
+            })
+            return;
+        }
         setUploading(true);
         toast.promise(new Promise<{uploads: UnifiedCDNFileJSON[]; failed: {filename: string, reason: string}[]}>(async(resolve, reject) => {
             try {
-                const response = await api.ucdnClient?.uploadFiles(files);
-                if (!response) throw new Error("No client available to upload files.");
+                const response = await ucdnClient?.uploadFiles(files);
                 setPhotos((prev)=> [...response.uploads, ...prev])
                 resolve(response);
             } catch (error){
@@ -45,7 +62,7 @@ export default function PhotosPage() {
         })
     }
     useEffect(()=>{
-        if (api.ucdnClient){
+        if (ucdnClient){
             (async()=>{
                 setLoading(true);
                 console.log("Fetching photos with apiUrl", api.apiUrl, "and apiKey", api.apiKey);
@@ -54,7 +71,7 @@ export default function PhotosPage() {
                 setLoading(false);
             })();
         }
-    }, [api.ucdnClient])
+    }, [ucdnClient])
     useEffect(()=>{
         if (!scrollContainerRef.current) return;
         function scrollFunction(){
@@ -75,7 +92,7 @@ export default function PhotosPage() {
         </motion.div>
         <div ref={scrollContainerRef} className="h-screen flex flex-col items-center w-full overflow-auto absolute top-0 left-0 px-2 md:px-4">
             <div className="h-[calc(30vh+100px)] shrink-0"/>
-            <div className="shrink-0 min-h-[calc(70vh-100px)] bg-card w-full rounded-t-4xl max-w-[1000px] p-4">
+            <div className="shrink-0 min-h-[calc(70vh-100px)] border bg-background dark:border-none dark:bg-card w-full rounded-t-4xl max-w-[1000px] p-4">
                 <div className="flex items-center w-full gap-2">
                     <p className="text-sm text-muted-foreground">Photos are automatically cleared by 24 hours</p>
                     <div className="flex-1"/>
@@ -87,7 +104,7 @@ export default function PhotosPage() {
                             fileInputRef.current.click();
                         }
                     }}><Upload/> Upload</Button>
-                    <input type="file" multiple accept="image/*" disabled={loading || uploading} className="hidden" ref={fileInputRef} onChange={(e)=>{
+                    <input type="file" multiple accept={convertFileTypesToList(["images"]).join(", ")} disabled={loading || uploading} className="hidden" ref={fileInputRef} onChange={(e)=>{
                         if (!e.target.files || e.target.files.length === 0) return;
                         const files = Array.from(e.target.files);
                         fileInputRef.current!.value = "";
